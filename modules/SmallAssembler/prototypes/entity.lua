@@ -71,6 +71,19 @@ for i=1,3 do
                     end
                 end
             end
+            if entity.graphics_set.frozen_patch then
+                if entity.graphics_set.frozen_patch.sheets then
+                    for _, sheet in ipairs(entity.graphics_set.frozen_patch.sheets) do
+                        lib_graphics.rescale_animation(sheet, 2 / 3.)
+                    end
+                elseif entity.graphics_set.frozen_patch.sheet then lib_graphics.rescale_animation(entity.graphics_set.frozen_patch.sheet, 2 / 3.)
+                elseif entity.graphics_set.frozen_patch.north then
+                    lib_graphics.rescale_animation(entity.graphics_set.frozen_patch.north, 2 / 3.)
+                    if entity.graphics_set.frozen_patch.south then lib_graphics.rescale_animation(entity.graphics_set.frozen_patch.south, 2 / 3.) end
+                    if entity.graphics_set.frozen_patch.west then lib_graphics.rescale_animation(entity.graphics_set.frozen_patch.west, 2 / 3.) end
+                    if entity.graphics_set.frozen_patch.east then lib_graphics.rescale_animation(entity.graphics_set.frozen_patch.east, 2 / 3.) end
+                else lib_graphics.rescale_animation(entity.graphics_set.frozen_patch, 2 / 3.) end
+            end
         end
         entity.crafting_speed = entity.crafting_speed * (0.1 + 0.3 * i)
         if i == 3 and entity.module_slots then

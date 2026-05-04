@@ -1,6 +1,6 @@
 local lib = {}
 
----@param animation data.Animation
+---@param animation data.Animation | data.Sprite | data.SpriteSheet | data.SpriteNWaySheet
 ---@param scale double
 ---@return nil
 lib.rescale_animation = function(animation, scale)
