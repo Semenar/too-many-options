@@ -7,8 +7,6 @@
     "description": "How would you like to produce that?",
     "dependencies": [
       "base >= 2.0",
-      "reskins-bobs",
-      "reskins-angels",
-      "reskins-compatibility"
+      "reskins-assets-base"
     ]
 }
