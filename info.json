@@ -1,0 +1,14 @@
+{
+    "name": "too-many-options",
+    "version": "0.0.1",
+    "title": "Too Many Options",
+    "author": "exfret & Semenar",
+    "factorio_version": "2.0",
+    "description": "How would you like to produce that?",
+    "dependencies": [
+      "base >= 2.0",
+      "reskins-bobs",
+      "reskins-angels",
+      "reskins-compatibility"
+    ]
+}
