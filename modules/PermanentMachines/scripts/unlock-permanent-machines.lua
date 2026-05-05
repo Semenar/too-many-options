@@ -3,9 +3,11 @@ local CONSTANTS = require("common.constants")
 local lib_strings = require("lib.strings")
 
 local replace_map = {}
+local replace_map_reverse = {}
 for name, _ in pairs(prototypes.entity) do
     if lib_strings.starts_with(name, CONSTANTS.mod_name) and lib_strings.ends_with(name, "-permanent") and prototypes.entity[name .. "-unlocked"] ~= nil then
         replace_map[name] = name .. "-unlocked"
+        replace_map_reverse[name .. "-unlocked"] = name
     end
 end
 
@@ -21,6 +23,16 @@ event_lib.add_lib({
                         end
                     end
                 end
+            end
+        end,
+        on_robot_built_entity = function(event)
+            if replace_map_reverse[event.entity.prototype.name] then
+                event.entity.surface.create_entity({name = replace_map_reverse[event.entity.prototype.name], position = event.entity.position, direction = event.entity.direction, force = event.entity.force, mirror = event.entity.mirroring, quality = event.entity.quality, fast_replace = true, create_build_effect_smoke = false})
+            end
+        end,
+        on_space_platform_built_entity = function(event)
+            if replace_map_reverse[event.entity.prototype.name] then
+                event.entity.surface.create_entity({name = replace_map_reverse[event.entity.prototype.name], position = event.entity.position, direction = event.entity.direction, force = event.entity.force, mirror = event.entity.mirroring, quality = event.entity.quality, fast_replace = true, create_build_effect_smoke = false})
             end
         end
     }
