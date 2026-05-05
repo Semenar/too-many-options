@@ -1,0 +1,1 @@
+require("modules.PermanentMachines.scripts.unlock-permanent-machines")
