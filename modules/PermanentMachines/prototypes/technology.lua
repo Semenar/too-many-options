@@ -32,7 +32,7 @@ data:extend({
                 {"automation-science-pack", 1}
             }
         },
-        prerequisites = {"automation"}
+        prerequisites = {"concrete"}
     },
     {
         type = "technology",
