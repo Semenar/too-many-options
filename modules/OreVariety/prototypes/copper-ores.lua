@@ -52,7 +52,7 @@ if data.raw.resource["copper-ore"] and data.raw["autoplace-control"]["copper-ore
             results = mining_result or {
                 {
                     type = "item",
-                    name = "copper-ore",
+                    name = name,
                     amount = 1
                 }
             }
@@ -89,7 +89,52 @@ if data.raw.resource["copper-ore"] and data.raw["autoplace-control"]["copper-ore
         data:extend({ore, autoplace_control})
     end
 
-    clone_copper(CONSTANTS.mod_name .. "-copper-bornite", {r=0.4, g=0.4, b=0.2}, 1, 2)
+    local clone_copper_item = function(name, tint)
+        data:extend({
+            {
+                type = "item",
+                name = CONSTANTS.mod_name .. "-copper-" .. name,
+                localised_name = {"entity-name." .. CONSTANTS.mod_name .. "-copper-" .. name},
+                icons = {
+                    {
+                        icon = "__base__/graphics/icons/copper-ore.png",
+                        tint = tint
+                    }
+                },
+                pictures =
+                {
+                    {size = 64, filename = "__base__/graphics/icons/copper-ore.png", scale = 0.5, mipmap_count = 4, tint = tint},
+                    {size = 64, filename = "__base__/graphics/icons/copper-ore-1.png", scale = 0.5, mipmap_count = 4, tint = tint},
+                    {size = 64, filename = "__base__/graphics/icons/copper-ore-2.png", scale = 0.5, mipmap_count = 4, tint = tint},
+                    {size = 64, filename = "__base__/graphics/icons/copper-ore-3.png", scale = 0.5, mipmap_count = 4, tint = tint}
+                },
+                subgroup = "raw-resource",
+                order = "f[copper-ore]-" .. name,
+                inventory_move_sound = item_sounds.resource_inventory_move,
+                pick_sound = item_sounds.resource_inventory_pickup,
+                drop_sound = item_sounds.resource_inventory_move,
+                stack_size = 50,
+                weight = 2 * kg
+            },
+            {
+                type = "recipe",
+                name = CONSTANTS.mod_name .. "-" .. name .. "-smelting",
+                localised_name = {"recipe-name." .. CONSTANTS.mod_name .. "-ore-smelting", {"entity-name." .. CONSTANTS.mod_name .. "-copper-" .. name}},
+                category = "smelting",
+                enabled = true,
+                auto_recycle = false,
+                energy_required = 3.2,
+                ingredients = {{type = "item", name = CONSTANTS.mod_name .. "-copper-" .. name, amount = 1}},
+                results = {{type="item", name="copper-plate", amount=1}},
+                main_product = "copper-plate",
+                allow_productivity = true
+            }
+        })
+    end
+
+    local bornite_tint = {r=0.4, g=0.4, b=0.2}
+    clone_copper(CONSTANTS.mod_name .. "-copper-bornite", bornite_tint, 1, 2)
+    clone_copper_item("bornite", bornite_tint)
     data.raw.resource[CONSTANTS.mod_name .. "-copper-bornite"].autoplace.probability_expression = data.raw.resource[CONSTANTS.mod_name .. "-copper-bornite"].autoplace.probability_expression .. " * (y < 0)"
 
     local chalcopyrite_tint = {r=0.6, g=0.7, b=0.3}
@@ -189,6 +234,7 @@ if data.raw.resource["copper-ore"] and data.raw["autoplace-control"]["copper-ore
         {
             type = "recipe",
             name = CONSTANTS.mod_name .. "-chalcopyrite-smelting",
+            localised_name = {"recipe-name." .. CONSTANTS.mod_name .. "-ore-smelting", {"entity-name." .. CONSTANTS.mod_name .. "-copper-chalcopyrite"}},
             category = "smelting",
             enabled = true,
             auto_recycle = false,
@@ -254,117 +300,37 @@ if data.raw.resource["copper-ore"] and data.raw["autoplace-control"]["copper-ore
     end
 
     local tetrahedrite_tint = {r=0.4, g=0.7, b=1}
-    clone_copper(CONSTANTS.mod_name .. "-copper-tetrahedrite", tetrahedrite_tint, 1, 1. / 1.5, {
-        {
-            type = "item",
-            name = CONSTANTS.mod_name .. "-copper-tetrahedrite",
-            amount = 1
-        }
-    })
-    data:extend({
-        {
-            type = "item",
-            name = CONSTANTS.mod_name .. "-copper-tetrahedrite",
-            icons = {
-                {
-                    icon = "__base__/graphics/icons/copper-ore.png",
-                    tint = tetrahedrite_tint
-                }
-            },
-            pictures =
-            {
-                {size = 64, filename = "__base__/graphics/icons/copper-ore.png", scale = 0.5, mipmap_count = 4, tint = tetrahedrite_tint},
-                {size = 64, filename = "__base__/graphics/icons/copper-ore-1.png", scale = 0.5, mipmap_count = 4, tint = tetrahedrite_tint},
-                {size = 64, filename = "__base__/graphics/icons/copper-ore-2.png", scale = 0.5, mipmap_count = 4, tint = tetrahedrite_tint},
-                {size = 64, filename = "__base__/graphics/icons/copper-ore-3.png", scale = 0.5, mipmap_count = 4, tint = tetrahedrite_tint}
-            },
-            subgroup = "raw-resource",
-            order = "f[copper-ore]-tetrahedrite",
-            inventory_move_sound = item_sounds.resource_inventory_move,
-            pick_sound = item_sounds.resource_inventory_pickup,
-            drop_sound = item_sounds.resource_inventory_move,
-            stack_size = 50,
-            weight = 2 * kg,
-            fuel_category = "chemical",
-            fuel_value = "6MJ"
-        },
-        {
-            type = "recipe",
-            name = CONSTANTS.mod_name .. "-tetrahedrite-smelting",
-            category = "smelting",
-            enabled = true,
-            auto_recycle = false,
-            energy_required = 3.2,
-            ingredients = {{type = "item", name = CONSTANTS.mod_name .. "-copper-tetrahedrite", amount = 1}},
-            results = {{type="item", name="copper-plate", amount=1}},
-            main_product = "copper-plate",
-            allow_productivity = true
-        }
-    })
+    clone_copper(CONSTANTS.mod_name .. "-copper-tetrahedrite", tetrahedrite_tint, 1, 1. / 1.5)
+    clone_copper_item("tetrahedrite", tetrahedrite_tint)
+    data.raw.item[CONSTANTS.mod_name .. "-copper-tetrahedrite"].fuel_category = "chemical"
+    data.raw.item[CONSTANTS.mod_name .. "-copper-tetrahedrite"].fuel_value = "6MJ"
 
-    clone_copper(CONSTANTS.mod_name .. "-copper-tenorite", {r=0.2, g=0.3, b=0.4}, 1, 4)
+    local tenorite_tint = {r=0.2, g=0.3, b=0.4}
+    clone_copper(CONSTANTS.mod_name .. "-copper-tenorite", tenorite_tint, 1, 4)
+    clone_copper_item("tenorite", tenorite_tint)
     data.raw.resource[CONSTANTS.mod_name .. "-copper-tenorite"].map_color = {r=1, g=1, b=1, a=0}
 
-    clone_copper(CONSTANTS.mod_name .. "-copper-enargite", {r=0.2, g=0.5, b=0.8}, 1. / 4, 5)
+    local enargite_tint = {r=0.2, g=0.5, b=0.8}
+    clone_copper(CONSTANTS.mod_name .. "-copper-enargite", enargite_tint, 1. / 4, 5)
+    clone_copper_item("enargite", enargite_tint)
     data.raw.resource[CONSTANTS.mod_name .. "-copper-enargite"].collision_box = {{-0.45, -0.45}, {0.45, 0.45}}
     data.raw.resource[CONSTANTS.mod_name .. "-copper-enargite"].collision_mask = {
         layers = {item=true, meltable=true, object=true, player=true, water_tile=true, is_object=true, is_lower_object=true}
     }
 
     local chrysocolla_tint = {r=0.2, g=0.7, b=1}
-    clone_copper(CONSTANTS.mod_name .. "-copper-chrysocolla", chrysocolla_tint, 1 / 1.5, 3, {
-        {
-            type = "item",
-            name = CONSTANTS.mod_name .. "-copper-chrysocolla",
-            amount = 1
-        }
-    })
-    data:extend({
-        {
-            type = "item",
-            name = CONSTANTS.mod_name .. "-copper-chrysocolla",
-            icons = {
-                {
-                    icon = "__base__/graphics/icons/copper-ore.png",
-                    tint = chrysocolla_tint
-                }
-            },
-            pictures =
-            {
-                {size = 64, filename = "__base__/graphics/icons/copper-ore.png", scale = 0.5, mipmap_count = 4, tint = chrysocolla_tint},
-                {size = 64, filename = "__base__/graphics/icons/copper-ore-1.png", scale = 0.5, mipmap_count = 4, tint = chrysocolla_tint},
-                {size = 64, filename = "__base__/graphics/icons/copper-ore-2.png", scale = 0.5, mipmap_count = 4, tint = chrysocolla_tint},
-                {size = 64, filename = "__base__/graphics/icons/copper-ore-3.png", scale = 0.5, mipmap_count = 4, tint = chrysocolla_tint}
-            },
-            subgroup = "raw-resource",
-            order = "f[copper-ore]-chrysocolla",
-            inventory_move_sound = item_sounds.resource_inventory_move,
-            pick_sound = item_sounds.resource_inventory_pickup,
-            drop_sound = item_sounds.resource_inventory_move,
-            stack_size = 50,
-            weight = 2 * kg,
-            spoil_ticks = 30 * minute
-        },
-        {
-            type = "recipe",
-            name = CONSTANTS.mod_name .. "-chrysocolla-smelting",
-            category = "smelting",
-            enabled = true,
-            auto_recycle = false,
-            energy_required = 3.2,
-            ingredients = {{type = "item", name = CONSTANTS.mod_name .. "-copper-chrysocolla", amount = 1}},
-            results = {{type="item", name="copper-plate", amount=1}},
-            main_product = "copper-plate",
-            allow_productivity = true
-        }
-    })
+    clone_copper(CONSTANTS.mod_name .. "-copper-chrysocolla", chrysocolla_tint, 0.7, 3)
+    clone_copper_item("chrysocolla", chrysocolla_tint)
+    data.raw.item[CONSTANTS.mod_name .. "-copper-chrysocolla"].spoil_ticks = 30 * minute
 
-    clone_copper(CONSTANTS.mod_name .. "-copper-malachite", {r=0.3, g=0.8, b=0.8}, 10, 0.1,  {
+    local malachite_tint = {r=0.3, g=0.8, b=0.8}
+    clone_copper(CONSTANTS.mod_name .. "-copper-malachite", malachite_tint, 10, 0.1,  {
         {
             type = "item",
-            name = "copper-ore",
+            name = CONSTANTS.mod_name .. "-copper-malachite",
             amount = 100
         }
     })
+    clone_copper_item("malachite", malachite_tint)
     data.raw.resource[CONSTANTS.mod_name .. "-copper-malachite"].autoplace.richness_expression = data.raw.resource[CONSTANTS.mod_name .. "-copper-malachite"].autoplace.richness_expression .. " * 0.01"
 end

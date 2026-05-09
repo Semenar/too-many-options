@@ -52,7 +52,7 @@ if data.raw.resource["iron-ore"] and data.raw["autoplace-control"]["iron-ore"] t
             results = mining_result or {
                 {
                     type = "item",
-                    name = "iron-ore",
+                    name = name,
                     amount = 1
                 }
             }
@@ -89,10 +89,54 @@ if data.raw.resource["iron-ore"] and data.raw["autoplace-control"]["iron-ore"] t
         data:extend({ore, autoplace_control})
     end
 
-    clone_iron(CONSTANTS.mod_name .. "-iron-pyrite", {r=1, g=0.8, b=0.4}, 1, 3, {
+    local clone_iron_item = function(name, tint)
+        data:extend({
+            {
+                type = "item",
+                name = CONSTANTS.mod_name .. "-iron-" .. name,
+                localised_name = {"entity-name." .. CONSTANTS.mod_name .. "-iron-" .. name},
+                icons = {
+                    {
+                        icon = "__base__/graphics/icons/iron-ore.png",
+                        tint = tint
+                    }
+                },
+                pictures =
+                {
+                    {size = 64, filename = "__base__/graphics/icons/iron-ore.png", scale = 0.5, mipmap_count = 4, tint = tint},
+                    {size = 64, filename = "__base__/graphics/icons/iron-ore-1.png", scale = 0.5, mipmap_count = 4, tint = tint},
+                    {size = 64, filename = "__base__/graphics/icons/iron-ore-2.png", scale = 0.5, mipmap_count = 4, tint = tint},
+                    {size = 64, filename = "__base__/graphics/icons/iron-ore-3.png", scale = 0.5, mipmap_count = 4, tint = tint}
+                },
+                subgroup = "raw-resource",
+                order = "e[iron-ore]-" .. name,
+                inventory_move_sound = item_sounds.resource_inventory_move,
+                pick_sound = item_sounds.resource_inventory_pickup,
+                drop_sound = item_sounds.resource_inventory_move,
+                stack_size = 50,
+                weight = 2 * kg
+            },
+            {
+                type = "recipe",
+                name = CONSTANTS.mod_name .. "-" .. name .. "-smelting",
+                localised_name = {"recipe-name." .. CONSTANTS.mod_name .. "-ore-smelting", {"entity-name." .. CONSTANTS.mod_name .. "-iron-" .. name}},
+                category = "smelting",
+                enabled = true,
+                auto_recycle = false,
+                energy_required = 3.2,
+                ingredients = {{type = "item", name = CONSTANTS.mod_name .. "-iron-" .. name, amount = 1}},
+                results = {{type="item", name="iron-plate", amount=1}},
+                main_product = "iron-plate",
+                allow_productivity = true
+            }
+        })
+    end
+
+    local pyrite_tint = {r=1, g=0.8, b=0.4}
+    clone_iron(CONSTANTS.mod_name .. "-iron-pyrite", pyrite_tint, 1, 3, {
         {
             type = "item",
-            name = "iron-ore",
+            name = CONSTANTS.mod_name .. "-iron-pyrite",
             amount = 1
         },
         {
@@ -102,23 +146,23 @@ if data.raw.resource["iron-ore"] and data.raw["autoplace-control"]["iron-ore"] t
             probability = 0.01
         }
     })
+    clone_iron_item("pyrite", pyrite_tint)
 
-    clone_iron(CONSTANTS.mod_name .. "-iron-hematite", {r=1, g=0.3, b=0.3}, 5, 10)
+    local hematite_tint = {r=1, g=0.3, b=0.3}
+    clone_iron(CONSTANTS.mod_name .. "-iron-hematite", hematite_tint, 5, 10)
+    clone_iron_item("hematite", hematite_tint)
 
+    local siderite_tint = {r=1, g=0.75, b=0.5}
     clone_iron(CONSTANTS.mod_name .. "-iron-siderite", {r=1, g=0.75, b=0.5}, 1 / 2., 1 / 3.)
+    clone_iron_item("siderite", siderite_tint)
 
     local magnetite_tint = {r=0.8, g=0.8, b=0.9}
-    clone_iron(CONSTANTS.mod_name .. "-iron-magnetite", magnetite_tint, 3, 1, {
-        {
-            type = "item",
-            name = CONSTANTS.mod_name .. "-iron-magnetite",
-            amount = 1
-        }
-    })
+    clone_iron(CONSTANTS.mod_name .. "-iron-magnetite", magnetite_tint, 3, 1)
     data:extend({
         {
             type = "item",
             name = CONSTANTS.mod_name .. "-iron-magnetite",
+            localised_name = {"entity-name." .. CONSTANTS.mod_name .. "-iron-magnetite"},
             icons = {
                 {
                     icon = "__base__/graphics/icons/iron-ore.png",
@@ -158,50 +202,9 @@ if data.raw.resource["iron-ore"] and data.raw["autoplace-control"]["iron-ore"] t
     end
 
     local limonite_tint = {r=0.7, g=0.5, b=0.2}
-    clone_iron(CONSTANTS.mod_name .. "-iron-limonite", limonite_tint, 1.5, 1, {
-        {
-            type = "item",
-            name = CONSTANTS.mod_name .. "-iron-limonite",
-            amount = 1
-        }
-    })
+    clone_iron(CONSTANTS.mod_name .. "-iron-limonite", limonite_tint, 1.5, 1)
+    clone_iron_item("limonite", limonite_tint)
     data:extend({
-        {
-            type = "item",
-            name = CONSTANTS.mod_name .. "-iron-limonite",
-            icons = {
-                {
-                    icon = "__base__/graphics/icons/iron-ore.png",
-                    tint = limonite_tint
-                }
-            },
-            pictures =
-            {
-                {size = 64, filename = "__base__/graphics/icons/iron-ore.png", scale = 0.5, mipmap_count = 4, tint = limonite_tint},
-                {size = 64, filename = "__base__/graphics/icons/iron-ore-1.png", scale = 0.5, mipmap_count = 4, tint = limonite_tint},
-                {size = 64, filename = "__base__/graphics/icons/iron-ore-2.png", scale = 0.5, mipmap_count = 4, tint = limonite_tint},
-                {size = 64, filename = "__base__/graphics/icons/iron-ore-3.png", scale = 0.5, mipmap_count = 4, tint = limonite_tint}
-            },
-            subgroup = "raw-resource",
-            order = "e[iron-ore]-limonite",
-            inventory_move_sound = item_sounds.resource_inventory_move,
-            pick_sound = item_sounds.resource_inventory_pickup,
-            drop_sound = item_sounds.resource_inventory_move,
-            stack_size = 50,
-            weight = 2 * kg
-        },
-        {
-            type = "recipe",
-            name = CONSTANTS.mod_name .. "-limonite-smelting",
-            category = "smelting",
-            enabled = true,
-            auto_recycle = false,
-            energy_required = 3.2,
-            ingredients = {{type = "item", name = CONSTANTS.mod_name .. "-iron-limonite", amount = 1}},
-            results = {{type="item", name="iron-plate", amount=1}},
-            main_product = "iron-plate",
-            allow_productivity = true
-        },
         {
             type = "recipe",
             name = CONSTANTS.mod_name .. "-limonite-conversion",
@@ -217,7 +220,9 @@ if data.raw.resource["iron-ore"] and data.raw["autoplace-control"]["iron-ore"] t
         }
     })
 
-    clone_iron(CONSTANTS.mod_name .. "-iron-goethite", {r=0.6, g=0.5, b=0.4}, 2, 1)
+    local goethite_tint = {r=0.6, g=0.5, b=0.4}
+    clone_iron(CONSTANTS.mod_name .. "-iron-goethite", goethite_tint, 2, 1)
+    clone_iron_item("goethite", goethite_tint)
     data.raw.resource[CONSTANTS.mod_name .. "-iron-goethite"].autoplace = resource_autoplace.resource_autoplace_settings{
         name = CONSTANTS.mod_name .. "-iron-goethite",
         order = "b",
@@ -228,12 +233,14 @@ if data.raw.resource["iron-ore"] and data.raw["autoplace-control"]["iron-ore"] t
         random_spot_size_maximum = 2 * 2
     }
 
-    clone_iron(CONSTANTS.mod_name .. "-iron-taconite", {r=0.9, g=0.75, b=0.6}, 1, 2, {
+    local taconite_tint = {r=0.9, g=0.75, b=0.6}
+    clone_iron(CONSTANTS.mod_name .. "-iron-taconite", taconite_tint, 1, 2, {
         {
             type = "item",
-            name = "iron-ore",
+            name = CONSTANTS.mod_name .. "-iron-taconite",
             amount = 100,
             probability = 0.01
         }
     })
+    clone_iron_item("taconite", taconite_tint)
 end
