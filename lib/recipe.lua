@@ -1,8 +1,8 @@
 local lib = {}
 
 ---@param type string
----@param amt double
----@return double
+---@param amt number
+---@return number
 lib.apply_ingredient_count_limits = function(type, amt)
     if type == "item" and amt > 65535 then amt = 65535 end -- 2^16 - 1
     if type == "fluid" and amt > 549755813887 then amt = 549755813887 end -- 2^39 - 1
@@ -44,7 +44,7 @@ lib.ingredients_sum = function(a, b)
 end
 
 ---@param ingredients [data.IngredientPrototype] | nil
----@param multiplier double
+---@param multiplier number
 ---@param round_up? boolean
 ---@return [data.IngredientPrototype]
 lib.ingredients_mult = function(ingredients, multiplier, round_up)
@@ -73,7 +73,7 @@ lib.ingredients_mult = function(ingredients, multiplier, round_up)
 end
 
 ---@param ingredients [data.IngredientPrototype] | nil
----@param multiplier_dict {[string]: double}
+---@param multiplier_dict {[string]: number}
 ---@param round_up? boolean
 ---@return [data.IngredientPrototype]
 lib.ingredients_mult_specific = function(ingredients, multiplier_dict, round_up)

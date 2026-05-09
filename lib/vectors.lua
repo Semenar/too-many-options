@@ -47,7 +47,7 @@ lib.normalize_bounding_box = function(bounding_box)
 end
 
 ---@param bounding_box? BoundingBox
----@return double
+---@return number
 lib.bounding_box_area = function(bounding_box)
     local norm = lib.normalize_bounding_box(bounding_box)
     return math.abs((norm.right_bottom.x - norm.left_top.x) * (norm.right_bottom.y - norm.left_top.y))

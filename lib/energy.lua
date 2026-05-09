@@ -1,6 +1,6 @@
 local lib = {}
 
----@param energy double
+---@param energy number
 ---@return string
 lib.convert_to_energy = function(energy)
     energy = energy * 60 -- in W

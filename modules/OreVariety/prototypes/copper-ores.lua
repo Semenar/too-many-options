@@ -31,8 +31,8 @@ if data.raw.resource["copper-ore"] and data.raw["autoplace-control"]["copper-ore
 
     ---@param name string
     ---@param tint Color
-    ---@param mining_time_mult double
-    ---@param density_mult double
+    ---@param mining_time_mult number
+    ---@param density_mult number
     ---@param mining_result? (data.FluidProductPrototype|data.ItemProductPrototype)[]
     local clone_copper = function(name, tint, mining_time_mult, density_mult, mining_result)
         local ore = table.deepcopy(data.raw.resource["copper-ore"])

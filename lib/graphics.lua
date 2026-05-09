@@ -1,7 +1,7 @@
 local lib = {}
 
 ---@param animation data.Animation | data.Sprite | data.SpriteSheet | data.SpriteNWaySheet
----@param scale double
+---@param scale number
 ---@return nil
 lib.rescale_animation = function(animation, scale)
     if animation.layers then
