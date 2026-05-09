@@ -1,5 +1,8 @@
 local lib = {}
 
+local util = require("util")
+local lib_prototypes = require("lib.prototypes")
+
 ---@param type string
 ---@param amt number
 ---@return number
@@ -8,6 +11,16 @@ lib.apply_ingredient_count_limits = function(type, amt)
     if type == "fluid" and amt > 549755813887 then amt = 549755813887 end -- 2^39 - 1
 
     return amt
+end
+
+---@param product data.FluidProductPrototype | data.ItemProductPrototype
+---@return number
+lib.product_amount = function(product)
+    local probability = product.probability
+    if probability == nil then probability = 1 end
+
+    if product.amount then return probability * product.amount
+    else return probability * (product.amount_min + math.max(product.amount_max, product.amount_min)) / 2. end
 end
 
 ---@param a [data.IngredientPrototype] | nil
@@ -154,6 +167,65 @@ lib.replace_item_result = function(recipe, old_item, new_item, new_amount)
         end
         recipe.results = new_results
     end
+end
+
+---@param recipe data.RecipePrototype
+---@return data.IconData[]
+lib.get_recipe_icon = function(recipe)
+    if recipe.icons then return table.deepcopy(recipe.icons) or {} end
+    if recipe.icon then return {{
+        icon = recipe.icon,
+        icon_size = recipe.icon_size or 64
+    }} end
+    if recipe.main_product then
+        ---@type data.ItemPrototype
+        local item = lib_prototypes.get_named_prototype("item", recipe.main_product)
+        if item ~= nil then
+            if item.icons then return table.deepcopy(item.icons) or {} end
+            if item.icon then return {{
+                icon = item.icon,
+                icon_size = item.icon_size or 64
+            }} end
+        end
+    end
+    if recipe.results and table_size(recipe.results) == 1 then
+        ---@type data.ItemPrototype | data.FluidPrototype
+        local item = lib_prototypes.get_named_prototype(recipe.results[1].type, recipe.results[1].name)
+        if item ~= nil then
+            if item.icons then return table.deepcopy(item.icons) or {} end
+            if item.icon then return {{
+                icon = item.icon,
+                icon_size = item.icon_size or 64
+            }} end
+        end
+    end
+    return {}
+end
+
+---@param recipe data.RecipePrototype
+---@return LocalisedString
+lib.get_localised_name = function(recipe)
+    if recipe.localised_name then return table.deepcopy(recipe.localised_name) or "" end
+    if not recipe.results then return {"recipe-name." .. recipe.name} end
+
+    local main_product = util.get_recipe_main_product(recipe, util.normalize_recipe_products(recipe))
+    if main_product ~= nil then
+        local main_product_prototype = lib_prototypes.get_named_prototype(main_product.type, main_product.name)
+        local product_amount = lib.product_amount(main_product)
+        if product_amount ~= 1 then
+            if main_product_prototype ~= nil and main_product_prototype.localised_name then
+                return {"?", {"recipe-name." .. recipe.name}, {"description.creates-number-entities-value", table.deepcopy(main_product_prototype.localised_name), tostring(product_amount)}}
+            end
+            return {"?", {"recipe-name." .. recipe.name}, {"description.creates-number-entities-value", {main_product.type .. "-name." .. main_product.name}, tostring(product_amount)}}
+        else
+            if main_product_prototype ~= nil and main_product_prototype.localised_name then
+                return {"?", {"recipe-name." .. recipe.name}, table.deepcopy(main_product_prototype.localised_name)}
+            end
+            return {"?", {"recipe-name." .. recipe.name}, {main_product.type .. "-name." .. main_product.name}}
+        end
+    end
+    
+    return {"recipe-name." .. recipe.name}
 end
 
 return lib

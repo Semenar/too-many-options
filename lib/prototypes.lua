@@ -10,6 +10,10 @@ lib.get_named_prototype = function(type, name)
                 return data.raw[category][name]
             end
         end
+    else
+        if data.raw[type] then
+            return data.raw[type][name]
+        end
     end
     return nil
 end
