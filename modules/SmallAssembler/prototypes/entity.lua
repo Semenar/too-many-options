@@ -10,6 +10,7 @@ for i=1,3 do
         entity.icon = "__" .. CONSTANTS.mod_name .. "__/graphics/SmallAssembler/small-assembler-" .. i .. ".png"
         if entity.minable then
             entity.minable.result = entity.name
+            entity.minable.results = nil
         end
         entity.max_health = entity.max_health * 0.5
         if entity.circuit_wire_max_distance then

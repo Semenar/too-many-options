@@ -1,0 +1,1 @@
+require("modules.StaticMachines.prototypes.static-machines")
