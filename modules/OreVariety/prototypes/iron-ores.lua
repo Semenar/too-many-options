@@ -7,6 +7,8 @@
 -- Goethite - dark gray, 2x harder to mine and 2x wider in both directions
 -- Taconite - gray, 2x richer, 1% chance to produce 100 iron, the rest does nothing
 
+require ("util")
+
 local CONSTANTS = require("common.constants")
 
 local lib_vectors = require("lib.vectors")
