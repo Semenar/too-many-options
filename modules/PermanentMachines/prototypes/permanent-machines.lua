@@ -726,13 +726,13 @@ for _, machine_spec in ipairs(PERMANENT_MACHINES) do
         local unlocked_machine = table.deepcopy(permanent_machine)
         unlocked_machine.name = unlocked_machine.name .. "-unlocked"
         unlocked_machine.localised_description = nil
-        unlocked_machine.hidden = true
         unlocked_machine.hidden_in_factoriopedia = true
         unlocked_machine.minable = {
             mining_time = 1,
             result = permanent_machine.name
         }
         unlocked_machine.flags = table.deepcopy(original_machine.flags or {})
+        table.insert(unlocked_machine.flags, "not-in-made-in")
         unlocked_machine.max_health = original_machine.max_health
         unlocked_machine.placeable_by = {item = permanent_machine.name, count = 1}
 

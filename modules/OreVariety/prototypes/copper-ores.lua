@@ -308,7 +308,7 @@ if data.raw.resource["copper-ore"] and data.raw["autoplace-control"]["copper-ore
     local tenorite_tint = {r=0.2, g=0.3, b=0.4}
     clone_copper(CONSTANTS.mod_name .. "-copper-tenorite", tenorite_tint, 1, 4)
     clone_copper_item("tenorite", tenorite_tint)
-    data.raw.resource[CONSTANTS.mod_name .. "-copper-tenorite"].map_color = {r=1, g=1, b=1, a=0}
+    data.raw.resource[CONSTANTS.mod_name .. "-copper-tenorite"].map_color.a = 0
 
     local enargite_tint = {r=0.2, g=0.5, b=0.8}
     clone_copper(CONSTANTS.mod_name .. "-copper-enargite", enargite_tint, 1. / 4, 5)

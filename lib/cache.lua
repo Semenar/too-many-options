@@ -45,4 +45,21 @@ lib.product_to_recipe = function()
     return cache.product_to_recipe
 end
 
+---@return {[string]: data.RecipePrototype[]}
+lib.ingredient_to_recipe = function()
+    if cache.ingredient_to_recipe then return cache.ingredient_to_recipe end
+    cache.ingredient_to_recipe = {}
+    if data.raw.recipe then
+        for _, recipe in pairs(data.raw.recipe) do
+            if recipe.ingredients then
+                for _, ingredient in ipairs(recipe.ingredients) do
+                    cache.ingredient_to_recipe[ingredient.type .. "." .. ingredient.name] = cache.ingredient_to_recipe[ingredient.type .. "." .. ingredient.name] or {}
+                    table.insert(cache.ingredient_to_recipe[ingredient.type .. "." .. ingredient.name], recipe)
+                end
+            end
+        end
+    end
+    return cache.ingredient_to_recipe
+end
+
 return lib

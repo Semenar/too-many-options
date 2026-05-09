@@ -1,0 +1,1 @@
+require("modules.OreFurnace.prototypes.ore-furnace")

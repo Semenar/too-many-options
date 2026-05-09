@@ -1,0 +1,1 @@
+require("modules.OreFurnace.scripts.ore-furnace-replacer")
