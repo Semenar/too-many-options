@@ -5,6 +5,7 @@ lib_cache.invalidate_cache()
 
 local lib_recipe = require("lib.recipe")
 local lib_graphics = require("lib.graphics")
+local lib_prototypes = require("lib.prototypes")
 local lib_technologies = require("lib.technologies")
 
 ---@param recipes data.RecipePrototype[] | nil
@@ -52,7 +53,7 @@ end
 ---@param ingredients string[]
 ---@param base_cost number
 ---@param end_tech string
----@param research_time number
+---@param research_time? number
 ---@param cost_scaling? number
 local function create_conditional_productivity_technology(recipes, name, ingredients, base_cost, end_tech, research_time, cost_scaling)
     if recipes == nil then return end
@@ -111,7 +112,7 @@ local function create_conditional_productivity_technology(recipes, name, ingredi
         technology_prerequisites = {cheapest_unlock_tech.name}
     end
     for _, pack in ipairs(ingredients) do
-        if data.raw.technology[pack] then
+        if data.raw.technology[pack] and (cheapest_unlock_tech == nil or pack ~= cheapest_unlock_tech.name) then
             table.insert(technology_prerequisites, pack)
         end
     end
@@ -129,11 +130,21 @@ local function create_conditional_productivity_technology(recipes, name, ingredi
         effect_description = {CONSTANTS.mod_name .. "-disable-with", end_tech}
     })
 
+    local technology_name = lib_recipe.get_localised_name(data.raw.recipe[verified_recipes[1]])
+    local named_prototype = lib_prototypes.get_named_prototype("item", name)
+    if named_prototype then
+        if named_prototype.localised_name then
+            technology_name = table.deepcopy(named_prototype.localised_name)
+        else
+            technology_name = {"item-name." .. name}
+        end
+    end
+
     data:extend({
         {
             type = "technology",
             name = CONSTANTS.mod_name .. "-" .. name .. "-until-" .. end_tech .. "-productivity-1",
-            localised_name = {"technology-name." .. CONSTANTS.mod_name .. "-conditional-productivity", lib_recipe.get_localised_name(data.raw.recipe[verified_recipes[1]])},
+            localised_name = {"technology-name." .. CONSTANTS.mod_name .. "-conditional-productivity", technology_name},
             localised_description = {"technology-description." .. CONSTANTS.mod_name .. "-conditional-productivity", lib_technologies.get_localised_name(data.raw.technology[end_tech])},
             icons = technology_icon,
             unit = {
@@ -148,5 +159,22 @@ local function create_conditional_productivity_technology(recipes, name, ingredi
     })
 end
 
-create_conditional_productivity_technology(recipes_to_names(lib_cache.product_to_recipe()["item.iron-plate"]), "iron-plate", {"automation-science-pack"}, 100, "automation", 30)
+local sci_red = {"automation-science-pack"}
+local sci_green = {"automation-science-pack", "logistic-science-pack"}
+local sci_blue = {"automation-science-pack", "logistic-science-pack", "chemical-science-pack"}
+local sci_purple = {"automation-science-pack", "logistic-science-pack", "chemical-science-pack", "production-science-pack"}
+local sci_space = {"automation-science-pack", "logistic-science-pack", "chemical-science-pack", "production-science-pack", "utility-science-pack", "space-science-pack"}
 
+create_conditional_productivity_technology(recipes_to_names(lib_cache.product_to_recipe()["item.iron-plate"]), "iron-plate", sci_red, 100, "automation", 30)
+create_conditional_productivity_technology(recipes_to_names(lib_cache.product_to_recipe()["item.copper-plate"]), "copper-plate", sci_red, 100, "automation", 30)
+create_conditional_productivity_technology(recipes_to_names(lib_cache.product_to_recipe()["item.stone-brick"]), "stone-brick", sci_red, 100, "automation", 30)
+create_conditional_productivity_technology(recipes_to_names(lib_cache.product_to_recipe()["item.automation-science-pack"]), "automation-science-pack", sci_red, 100, "automation", 30)
+create_conditional_productivity_technology(recipes_to_names(lib_cache.product_to_recipe()["item.electronic-circuit"]), "electronic-circuit", sci_red, 100, "automation", 30)
+create_conditional_productivity_technology(recipes_to_names(lib_cache.product_to_recipe()["item.firearm-magazine"]), "firearm-magazine", sci_red, 200, "military", 30)
+create_conditional_productivity_technology(recipes_to_names(lib_cache.product_to_recipe()["item.steel-plate"]), "steel-plate", sci_green, 300, "steel-axe", 30)
+create_conditional_productivity_technology(recipes_to_names(lib_cache.product_to_recipe()["item.advanced-circuit"]), "advanced-circuit", sci_blue, 500, "advanced-oil-processing")
+create_conditional_productivity_technology(recipes_to_names(lib_cache.product_to_recipe()["item.chemical-science-pack"]), "chemical-science-pack", sci_purple, 1500, "fast-inserter")
+create_conditional_productivity_technology({"basic-oil-processing"}, "oil-processing", sci_purple, 1500, "solar-energy")
+create_conditional_productivity_technology(recipes_to_names(lib_cache.product_to_recipe()["item.processing-unit"]), "processing-unit", sci_purple, 1500, "electric-energy-distribution-1")
+create_conditional_productivity_technology(recipes_to_names(lib_cache.product_to_recipe()["item.rocket-fuel"]), "rocket-fuel", sci_space, 3000, "construction-robotics")
+create_conditional_productivity_technology(recipes_to_names(lib_cache.product_to_recipe()["item.low-density-structure"]), "low-density-structure", sci_space, 3000, "construction-robotics")

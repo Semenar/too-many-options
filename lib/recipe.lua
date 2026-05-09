@@ -214,9 +214,9 @@ lib.get_localised_name = function(recipe)
         local product_amount = lib.product_amount(main_product)
         if product_amount ~= 1 then
             if main_product_prototype ~= nil and main_product_prototype.localised_name then
-                return {"?", {"recipe-name." .. recipe.name}, {"description.creates-number-entities-value", table.deepcopy(main_product_prototype.localised_name), tostring(product_amount)}}
+                return {"?", {"recipe-name." .. recipe.name}, {"description.creates-number-entities-value", tostring(product_amount), table.deepcopy(main_product_prototype.localised_name)}}
             end
-            return {"?", {"recipe-name." .. recipe.name}, {"description.creates-number-entities-value", {main_product.type .. "-name." .. main_product.name}, tostring(product_amount)}}
+            return {"?", {"recipe-name." .. recipe.name}, {"description.creates-number-entities-value", tostring(product_amount), {main_product.type .. "-name." .. main_product.name}}}
         else
             if main_product_prototype ~= nil and main_product_prototype.localised_name then
                 return {"?", {"recipe-name." .. recipe.name}, table.deepcopy(main_product_prototype.localised_name)}
