@@ -46,7 +46,7 @@ for _, category in ipairs({"furnace", "assembling-machine", "lab", "mining-drill
                 })
                 shy_machine.icon = nil
                 shy_machine.icon_size = nil
-                if shy_machine.next_upgrade then shy_machine.next_upgrade = CONSTANTS.mod_name .. "-" .. shy_machine.next_upgrade .. "-static" end
+                if shy_machine.next_upgrade then shy_machine.next_upgrade = CONSTANTS.mod_name .. "-" .. shy_machine.next_upgrade .. "-shy" end
                 if shy_machine.energy_usage then shy_machine.energy_usage = lib_energy.convert_to_energy(util.parse_energy(shy_machine.energy_usage) * SHY_MACHINE_POWER_CONSUMPTION_MULTIPLIER) end
                 if shy_machine.energy_source then
                     if shy_machine.energy_source.emissions_per_minute then
@@ -111,7 +111,7 @@ for _, category in ipairs({"furnace", "assembling-machine", "lab", "mining-drill
                 machine_item.icon = nil
                 machine_item.icon_size = nil
                 machine_item.place_result = shy_machine.name
-                machine_item.order = machine_item.order .. "-u[static]"
+                machine_item.order = machine_item.order .. "-u[shy]"
 
                 data:extend({shy_machine, machine_item})
 
