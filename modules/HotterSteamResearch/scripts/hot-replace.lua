@@ -9,11 +9,14 @@ local function do_hot_swap(entity)
         end
         if base_name ~= nil then
             local new_entity = entity.surface.create_entity({
-                name =base_name .. "-hotter-" .. tostring(storage.curr_steam_heat_index),
+                name = base_name .. "-hotter-" .. tostring(storage.curr_steam_heat_index),
                 position = entity.position,
                 direction = entity.direction,
+                force = entity.force,
                 mirror = entity.mirroring,
+                quality = entity.quality,
                 fast_replace = true,
+                spill = false
             })
             -- Don't worry about removing machines from the table since I'm tired of coding this one thing and how many boilers/steam engines are you gonna place anyways
             -- It also only slows things down when a hotter steam tech is researched
