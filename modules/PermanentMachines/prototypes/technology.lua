@@ -60,7 +60,7 @@ data:extend({
         },
         max_level = "infinite",
         unit = {
-            count_formula = "25*2^L",
+            count_formula = "25*L",
             time = 30,
             ingredients = {
                 {"automation-science-pack", 1},
