@@ -119,13 +119,13 @@ lib.ingredients_mult_specific = function(ingredients, multiplier_dict, round_up)
 end
 
 ---@param recipe data.RecipePrototype
----@param old_item string
+---@param old_item string -- Either [name] or [type].[name].
 ---@param new_item? string
 ---@param new_amount? number
 lib.replace_item_ingredient = function(recipe, old_item, new_item, new_amount)
     if new_item ~= nil then
         for _, ingredient in ipairs(recipe.ingredients) do
-            if ingredient.name == old_item then
+            if ingredient.name == old_item or ingredient.type .. "." .. ingredient.name == old_item then
                 ingredient.name = new_item
                 if new_amount ~= nil then
                     ingredient.amount = new_amount
@@ -135,7 +135,7 @@ lib.replace_item_ingredient = function(recipe, old_item, new_item, new_amount)
     else
         local new_ingredients = {}
         for _, ingredient in ipairs(recipe.ingredients) do
-            if ingredient.name ~= old_item then
+            if ingredient.name ~= old_item and ingredient.type .. "." .. ingredient.name ~= old_item then
                 table.insert(new_ingredients, ingredient)
             end
         end
@@ -151,7 +151,7 @@ lib.replace_item_result = function(recipe, old_item, new_item, new_amount)
     if not recipe.results then return end
     if new_item ~= nil then
         for _, result in ipairs(recipe.results) do
-            if result.name == old_item then
+            if result.name == old_item or result.type .. "." .. result.name == old_item then
                 result.name = new_item
                 if new_amount ~= nil then
                     result.amount = new_amount
@@ -161,7 +161,7 @@ lib.replace_item_result = function(recipe, old_item, new_item, new_amount)
     else
         local new_results = {}
         for _, result in ipairs(recipe.results) do
-            if result.name ~= old_item then
+            if result.name ~= old_item and result.type .. "." .. result.name ~= old_item then
                 table.insert(new_results, result)
             end
         end
@@ -203,8 +203,11 @@ lib.get_recipe_icon = function(recipe)
 end
 
 ---@param recipe data.RecipePrototype
+---@param include_count? boolean
 ---@return LocalisedString
-lib.get_localised_name = function(recipe)
+lib.get_localised_name = function(recipe, include_count)
+    if include_count == nil then include_count = true end
+
     if recipe.localised_name then return table.deepcopy(recipe.localised_name) or "" end
     if not recipe.results then return {"recipe-name." .. recipe.name} end
 
@@ -212,7 +215,7 @@ lib.get_localised_name = function(recipe)
     if main_product ~= nil then
         local main_product_prototype = lib_prototypes.get_named_prototype(main_product.type, main_product.name)
         local product_amount = lib.product_amount(main_product)
-        if product_amount ~= 1 then
+        if product_amount ~= 1 and include_count then
             if main_product_prototype ~= nil and main_product_prototype.localised_name then
                 return {"?", {"recipe-name." .. recipe.name}, {"description.creates-number-entities-value", tostring(product_amount), table.deepcopy(main_product_prototype.localised_name)}}
             end

@@ -821,6 +821,11 @@ for _, machine_spec in ipairs(PERMANENT_MACHINES) do
         machine_item.icons = table.deepcopy(permanent_machine.icons)
         machine_item.order = machine_item.order .. "-u[permanent]"
 
+        local foundation_item = "refined-concrete"
+        if machine_spec.original_name == "boiler" or machine_spec.original_name == "steam-engine" then
+            foundation_item = "stone-brick"
+        end
+
         ---@type data.RecipePrototype
         local machine_recipe = {
             type = "recipe",
@@ -829,7 +834,7 @@ for _, machine_spec in ipairs(PERMANENT_MACHINES) do
                 {type = "item", name = machine_spec.original_name, amount = 1},
                 {
                     type = "item",
-                    name = "refined-concrete",
+                    name =  foundation_item,
                     amount = lib_vectors.bounding_box_area(original_machine.selection_box)
                 }
             },
