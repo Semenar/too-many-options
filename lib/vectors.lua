@@ -27,7 +27,7 @@ lib.normalize_map_position = function(position)
     if position[1] ~= nil then norm.x = position[1] end
     if position[2] ~= nil then norm.y = position[2] end
     if position.x ~= nil then norm.x = position.x end
-    if position.y ~= nil then norm.x = position.y end
+    if position.y ~= nil then norm.y = position.y end
 
     return norm
 end
@@ -43,6 +43,18 @@ lib.normalize_bounding_box = function(bounding_box)
     if bounding_box.left_top ~= nil then norm.left_top = lib.normalize_map_position(bounding_box.left_top) end
     if bounding_box.right_bottom ~= nil then norm.right_bottom = lib.normalize_map_position(bounding_box.right_bottom) end
 
+    if norm.left_top.x > norm.right_bottom.x then
+        local temp = norm.left_top.x
+        norm.left_top.x = norm.right_bottom.x
+        norm.right_bottom.x = temp
+    end
+
+    if norm.left_top.y > norm.right_bottom.y then
+        local temp = norm.left_top.y
+        norm.left_top.y = norm.right_bottom.y
+        norm.right_bottom.y = temp
+    end
+
     return norm
 end
 
@@ -51,6 +63,13 @@ end
 lib.bounding_box_area = function(bounding_box)
     local norm = lib.normalize_bounding_box(bounding_box)
     return math.abs((norm.right_bottom.x - norm.left_top.x) * (norm.right_bottom.y - norm.left_top.y))
+end
+
+---@param bounding_box? BoundingBox
+---@return number
+lib.bounding_box_perimeter = function(bounding_box)
+    local norm = lib.normalize_bounding_box(bounding_box)
+    return 2 * (math.abs(norm.right_bottom.x - norm.left_top.x) + math.abs(norm.right_bottom.y - norm.left_top.y))
 end
 
 ---@param a Color

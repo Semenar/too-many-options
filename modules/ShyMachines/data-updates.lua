@@ -1,0 +1,1 @@
+require("modules.ShyMachines.prototypes.shy-machines")

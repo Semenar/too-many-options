@@ -119,7 +119,7 @@ if original_machine then
 
         data:extend({machine, machine_item})
 
-        for _, original_recipe in ipairs(lib_cache.product_to_recipe()["item." .. base_prototype]) do
+        for _, original_recipe in ipairs(lib_cache.product_to_recipe()["item." .. base_prototype] or {}) do
             local recipe = table.deepcopy(original_recipe)
             recipe.name = machine.name .. "-" .. recipe.name
             if original_recipe.name == base_prototype then recipe.name = machine.name end
@@ -132,7 +132,7 @@ if original_machine then
 
             data:extend({recipe})
 
-            for _, technology in ipairs(lib_cache.recipe_to_technology_unlock()[original_recipe.name]) do
+            for _, technology in ipairs(lib_cache.recipe_to_technology_unlock()[original_recipe.name] or {}) do
                 technology.effects = technology.effects or {}
                 table.insert(technology.effects, {
                     type = "unlock-recipe",

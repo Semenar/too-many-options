@@ -2,7 +2,7 @@ local CONSTANTS = require("common.constants")
 
 local matching_name = CONSTANTS.mod_name .. "-ore-furnace"
 
----@param event EventData.on_built_entity | EventData.on_robot_built_entity | EventData.on_space_platform_built_entity
+---@param event EventData.on_built_entity | EventData.on_robot_built_entity | EventData.on_space_platform_built_entity | EventData.script_raised_built
 local function validate_building(event)
     if event.entity.valid and event.entity.prototype.fast_replaceable_group == matching_name then
         local replace_with = matching_name
