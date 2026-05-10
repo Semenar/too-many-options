@@ -166,6 +166,11 @@ if original_machine ~= nil then
                 end
             end
 
+            -- Must be spawning on Nauvis
+            if not data.raw.planet or not data.raw.planet.nauvis or not data.raw.planet.nauvis.map_gen_settings or not data.raw.planet.nauvis.map_gen_settings.autoplace_settings or not data.raw.planet.nauvis.map_gen_settings.autoplace_settings.entity.settings or data.raw.planet.nauvis.map_gen_settings.autoplace_settings.entity.settings[resource.name] == nil then
+                is_valid = false
+            end
+
             -- Must allow placing a building on top
             if resource.collision_mask and resource.collision_mask.layers and resource.collision_mask.layers.object ~= nil then
                 is_valid = false
