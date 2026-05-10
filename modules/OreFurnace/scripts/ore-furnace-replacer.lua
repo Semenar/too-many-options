@@ -4,7 +4,7 @@ local matching_name = CONSTANTS.mod_name .. "-ore-furnace"
 
 ---@param event EventData.on_built_entity | EventData.on_robot_built_entity | EventData.on_space_platform_built_entity
 local function validate_building(event)
-    if event.entity.prototype.fast_replaceable_group == matching_name then
+    if event.entity.valid and event.entity.prototype.fast_replaceable_group == matching_name then
         local replace_with = matching_name
         local ores = event.entity.surface.find_entities_filtered{area = event.entity.bounding_box, type = "resource"}
         if ores then

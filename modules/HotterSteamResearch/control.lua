@@ -1,0 +1,1 @@
+require("modules.HotterSteamResearch.scripts.hot-replace")
