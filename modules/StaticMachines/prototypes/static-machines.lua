@@ -61,6 +61,7 @@ for _, category in ipairs({"furnace", "assembling-machine", "lab", "mining-drill
                 })
                 static_machine.icon = nil
                 static_machine.icon_size = nil
+                if static_machine.next_upgrade then static_machine.next_upgrade = CONSTANTS.mod_name .. "-" .. static_machine.next_upgrade .. "-static" end
                 if static_machine.mining_speed then static_machine.mining_speed = static_machine.mining_speed * STATIC_MACHINE_SPEEDUP end
                 if static_machine.crafting_speed then static_machine.crafting_speed = static_machine.crafting_speed * STATIC_MACHINE_SPEEDUP end
                 if static_machine.researching_speed then static_machine.researching_speed = static_machine.researching_speed * STATIC_MACHINE_SPEEDUP end

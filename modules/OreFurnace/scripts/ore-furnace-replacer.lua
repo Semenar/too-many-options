@@ -27,6 +27,7 @@ event_lib.add_lib({
     events = {
         on_built_entity = validate_building,
         on_robot_built_entity = validate_building,
-        on_space_platform_built_entity = validate_building
+        on_space_platform_built_entity = validate_building,
+        script_raised_built = validate_building
     }
 })

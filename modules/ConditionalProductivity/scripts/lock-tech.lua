@@ -1,5 +1,7 @@
 local CONSTANTS = require("common.constants")
 
+local lib_technologies = require("lib.technologies")
+
 local ban_map = {}
 for name, technology in pairs(prototypes.technology) do
     if technology.effects then
@@ -27,6 +29,34 @@ event_lib.add_lib({
                     end
                 end
                 event.research.force.research_queue = new_research_queue
+            end
+        end
+    },
+    on_nth_tick = {
+        [60] = function()
+            -- Enforce technology disabling in case of other mod interference
+            for _, force in pairs(game.forces) do
+                local changed_something = false
+                for source, ban_list in pairs(ban_map) do
+                    if force.technologies[source] and (force.technologies[source].researched or force.technologies[source].level > lib_technologies.get_technology_level(force.technologies[source].prototype)) then
+                        for technology, _ in pairs(ban_list) do
+                            if force.technologies[technology] and force.technologies[technology].enabled then
+                                force.technologies[technology].enabled = false
+                                changed_something = true
+                            end
+                        end
+                    end
+                end
+                -- Revalidate queue if something changed
+                if changed_something then
+                    local new_research_queue = {}
+                    for _, research in ipairs(force.research_queue) do
+                        if research.enabled then
+                            table.insert(new_research_queue, research)
+                        end
+                    end
+                    force.research_queue = new_research_queue
+                end
             end
         end
     }

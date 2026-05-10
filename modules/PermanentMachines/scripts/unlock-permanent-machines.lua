@@ -19,7 +19,7 @@ event_lib.add_lib({
                     for replace_from, replace_to in pairs(replace_map) do
                         local entities = surface.find_entities_filtered({name = replace_from, force = event.research.force})
                         for _, entity in ipairs(entities) do
-                            surface.create_entity({name = replace_to, position = entity.position, direction = entity.direction, force = entity.force, mirror = entity.mirroring, quality = entity.quality, fast_replace = true, create_build_effect_smoke = false})
+                            surface.create_entity({name = replace_to, position = entity.position, direction = entity.direction, force = entity.force, mirror = entity.mirroring, quality = entity.quality, fast_replace = true, spill = false, create_build_effect_smoke = false})
                         end
                     end
                 end
@@ -27,12 +27,17 @@ event_lib.add_lib({
         end,
         on_robot_built_entity = function(event)
             if replace_map_reverse[event.entity.prototype.name] then
-                event.entity.surface.create_entity({name = replace_map_reverse[event.entity.prototype.name], position = event.entity.position, direction = event.entity.direction, force = event.entity.force, mirror = event.entity.mirroring, quality = event.entity.quality, fast_replace = true, create_build_effect_smoke = false})
+                event.entity.surface.create_entity({name = replace_map_reverse[event.entity.prototype.name], position = event.entity.position, direction = event.entity.direction, force = event.entity.force, mirror = event.entity.mirroring, quality = event.entity.quality, fast_replace = true, spill = false, create_build_effect_smoke = false})
             end
         end,
         on_space_platform_built_entity = function(event)
             if replace_map_reverse[event.entity.prototype.name] then
-                event.entity.surface.create_entity({name = replace_map_reverse[event.entity.prototype.name], position = event.entity.position, direction = event.entity.direction, force = event.entity.force, mirror = event.entity.mirroring, quality = event.entity.quality, fast_replace = true, create_build_effect_smoke = false})
+                event.entity.surface.create_entity({name = replace_map_reverse[event.entity.prototype.name], position = event.entity.position, direction = event.entity.direction, force = event.entity.force, mirror = event.entity.mirroring, quality = event.entity.quality, fast_replace = true, spill = false, create_build_effect_smoke = false})
+            end
+        end,
+        script_raised_built = function(event)
+            if replace_map_reverse[event.entity.prototype.name] then
+                event.entity.surface.create_entity({name = replace_map_reverse[event.entity.prototype.name], position = event.entity.position, direction = event.entity.direction, force = event.entity.force, mirror = event.entity.mirroring, quality = event.entity.quality, fast_replace = true, spill = false, create_build_effect_smoke = false})
             end
         end
     }

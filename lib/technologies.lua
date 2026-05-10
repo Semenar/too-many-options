@@ -22,7 +22,7 @@ lib.get_base_technology_name = function(technology)
     end
 end
 
----@param technology data.TechnologyPrototype
+---@param technology data.TechnologyPrototype | LuaTechnologyPrototype
 ---@return number
 lib.get_technology_level = function(technology)
     local technology_parts = lib_strings.split(technology.name, "-")
