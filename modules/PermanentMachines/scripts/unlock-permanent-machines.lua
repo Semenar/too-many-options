@@ -26,16 +26,19 @@ event_lib.add_lib({
             end
         end,
         on_robot_built_entity = function(event)
+            if not event.entity.valid then return end
             if replace_map_reverse[event.entity.prototype.name] then
                 event.entity.surface.create_entity({name = replace_map_reverse[event.entity.prototype.name], position = event.entity.position, direction = event.entity.direction, force = event.entity.force, mirror = event.entity.mirroring, quality = event.entity.quality, fast_replace = true, spill = false, create_build_effect_smoke = false})
             end
         end,
         on_space_platform_built_entity = function(event)
+            if not event.entity.valid then return end
             if replace_map_reverse[event.entity.prototype.name] then
                 event.entity.surface.create_entity({name = replace_map_reverse[event.entity.prototype.name], position = event.entity.position, direction = event.entity.direction, force = event.entity.force, mirror = event.entity.mirroring, quality = event.entity.quality, fast_replace = true, spill = false, create_build_effect_smoke = false})
             end
         end,
         script_raised_built = function(event)
+            if not event.entity.valid then return end
             if replace_map_reverse[event.entity.prototype.name] then
                 event.entity.surface.create_entity({name = replace_map_reverse[event.entity.prototype.name], position = event.entity.position, direction = event.entity.direction, force = event.entity.force, mirror = event.entity.mirroring, quality = event.entity.quality, fast_replace = true, spill = false, create_build_effect_smoke = false})
             end

@@ -12,6 +12,7 @@ end
 
 ---@param event EventData.on_built_entity | EventData.on_robot_built_entity | EventData.on_space_platform_built_entity | EventData.script_raised_built
 local function check_shyness(event)
+    if not event.entity.valid then return end
     if not shy_machines[event.entity.name] then return end
     local bounding_box = lib_vectors.normalize_bounding_box(event.entity.bounding_box)
     local nearby_entities = event.entity.surface.find_entities_filtered{area = {{bounding_box.left_top.x - 1, bounding_box.left_top.y - 1}, {bounding_box.right_bottom.x + 1, bounding_box.right_bottom.y + 1}}}
