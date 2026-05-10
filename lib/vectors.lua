@@ -18,8 +18,8 @@ lib.normalize_color = function(color)
     return norm
 end
 
----@param position? MapPosition
----@return MapPosition.0
+---@param position? MapPosition | Vector
+---@return MapPosition.0 | Vector.0
 lib.normalize_map_position = function(position)
     local norm = {x = 0, y = 0}
     if position == nil then return norm end

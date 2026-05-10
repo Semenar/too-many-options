@@ -7,7 +7,7 @@
     "description": "How would you like to produce that?",
     "spoiling_required": true,
     "dependencies": [
-      "base >= 2.0",
+      "base >= 2.0.38",
       "reskins-assets-base"
     ]
 }

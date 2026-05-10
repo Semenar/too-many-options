@@ -1,0 +1,1 @@
+require("modules.LongerInserters.prototypes.longer-inserters")
