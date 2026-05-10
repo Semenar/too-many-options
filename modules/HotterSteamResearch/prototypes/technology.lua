@@ -1,3 +1,5 @@
+local CONSTANTS = require("common.constants")
+
 --for i = 1, 40 do
     --[[local prerequisites = {
         "fluid-handling"
@@ -25,6 +27,13 @@
                     {"logistic-science-pack", 1},
                 },
             },
+            effects = {
+                {
+                    type = "nothing",
+                    hidden = true,
+                    effect_description = {CONSTANTS.mod_name .. "-disable-with", "oil-processing"}
+                }
+            }
         }
     })
 --end
