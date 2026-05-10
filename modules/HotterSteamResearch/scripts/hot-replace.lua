@@ -59,7 +59,7 @@ event_lib.add_lib(
                 do_hot_swap(event.entity)
             end,
             on_research_finished = function(event)
-                if string.sub(event.research.name, 1, 12) == "hotter-steam" then
+                if event.research.name == "hotter-steam" then
                     storage.curr_steam_heat_index = 1 + storage.curr_steam_heat_index
                     local steam_machine_lists = {}
                     for k, steam_machines in pairs(storage.steam_machines) do

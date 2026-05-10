@@ -1,0 +1,1 @@
+require("modules.SmallAssemblerUpgrades.scripts.hot-replace")
