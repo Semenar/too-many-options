@@ -114,7 +114,7 @@ recipe.name = "void-lab"
 recipe.ingredients = {
     { type = "item", name = "iron-gear-wheel", amount = 10 },
     { type = "item", name = "iron-plate", amount = 15 },
-    { type = "item", name = "copper-cable", amount = 2 },
+    { type = "item", name = "copper-plate", amount = 2 },
 }
 recipe.results = {
     { type = "item", name = "void-lab", amount = 1},
