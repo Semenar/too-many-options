@@ -1,6 +1,6 @@
-require ("util")
+require("util")
 
-local PERMANENT_MACHINE_TINT = {r=0.4, g=0.4, b=0.4}
+local PERMANENT_MACHINE_TINT = {r = 0.4, g = 0.4, b = 0.4}
 
 local CONSTANTS = require("common.constants")
 
@@ -13,7 +13,7 @@ local PERMANENT_MACHINE_PRODUCTIVITY_BONUS_PERCENT = 25
 local PERMANENT_MACHINES = {
     {
         original_name = "assembling-machine-2",
-        tint = lib_vectors.color_mult(PERMANENT_MACHINE_TINT, {r=0.42, g=0.65, b=0.95}),
+        tint = lib_vectors.color_mult(PERMANENT_MACHINE_TINT, {r = 0.42, g = 0.65, b = 0.95}),
         base_layers = {
             {
                 filename = "__reskins-assets-base__/graphics/entity/assembling-machine/assembling-machine-base.png",
@@ -69,7 +69,7 @@ local PERMANENT_MACHINES = {
                 shift = util.by_pixel(0, -0.75),
                 frame_count = 32,
                 line_length = 8
-            },
+            }
         },
         icon_base_layers = {
             {
@@ -218,11 +218,11 @@ local PERMANENT_MACHINES = {
                     scale = 0.5
                 }
             }
-        },
+        }
     },
     {
         original_name = "assembling-machine-3",
-        tint = lib_vectors.color_mult(PERMANENT_MACHINE_TINT, {r=0.55, g=0.65, b=0.3}),
+        tint = lib_vectors.color_mult(PERMANENT_MACHINE_TINT, {r = 0.55, g = 0.65, b = 0.3}),
         base_layers = {
             {
                 filename = "__reskins-assets-base__/graphics/entity/assembling-machine/assembling-machine-base.png",
@@ -278,7 +278,7 @@ local PERMANENT_MACHINES = {
                 shift = util.by_pixel(0, -0.75),
                 frame_count = 32,
                 line_length = 8
-            },
+            }
         },
         icon_base_layers = {
             {
@@ -427,7 +427,7 @@ local PERMANENT_MACHINES = {
                     scale = 0.5
                 }
             }
-        },
+        }
     },
     {
         original_name = "chemical-plant",
@@ -612,6 +612,50 @@ local PERMANENT_MACHINES = {
                 icon_size = 64
             }
         }
+    },
+    {
+        original_name = "boiler",
+        tint = PERMANENT_MACHINE_TINT,
+        icon_base_layers = {
+            {
+                icon = "__reskins-assets-base__/graphics/icons/boiler/boiler-icon-base.png",
+                icon_size = 64
+            }
+        },
+        icon_tint_layers = {
+            {
+                icon = "__reskins-assets-base__/graphics/icons/boiler/boiler-icon-mask.png",
+                icon_size = 64
+            }
+        },
+        icon_after_tint_layers = {
+            {
+                icon = "__reskins-assets-base__/graphics/icons/boiler/boiler-icon-highlights.png",
+                icon_size = 64
+            }
+        }
+    },
+    {
+        original_name = "steam-engine",
+        tint = PERMANENT_MACHINE_TINT,
+        icon_base_layers = {
+            {
+                icon = "__reskins-assets-base__/graphics/icons/steam-engine/steam-engine-icon-base.png",
+                icon_size = 64
+            }
+        },
+        icon_tint_layers = {
+            {
+                icon = "__reskins-assets-base__/graphics/icons/steam-engine/steam-engine-icon-mask.png",
+                icon_size = 64
+            }
+        },
+        icon_after_tint_layers = {
+            {
+                icon = "__reskins-assets-base__/graphics/icons/steam-engine/steam-engine-icon-highlights.png",
+                icon_size = 64
+            }
+        }
     }
 }
 
@@ -624,10 +668,14 @@ for _, machine_spec in ipairs(PERMANENT_MACHINES) do
         local permanent_machine = table.deepcopy(original_machine)
 
         permanent_machine.name = CONSTANTS.mod_name .. "-" .. machine_spec.original_name .. "-permanent"
-        permanent_machine.localised_name = {"entity-name." .. CONSTANTS.mod_name .. "-permanent-machine", original_machine.localised_name or {"entity-name." .. machine_spec.original_name}}
+        permanent_machine.localised_name = {
+            "entity-name." .. CONSTANTS.mod_name .. "-permanent-machine",
+            original_machine.localised_name or {"entity-name." .. machine_spec.original_name}
+        }
         permanent_machine.localised_description = {"entity-description." .. CONSTANTS.mod_name .. "-permanent-machine"}
         permanent_machine.minable = nil
-        permanent_machine.fast_replaceable_group = CONSTANTS.mod_name .. "-" .. machine_spec.original_name .. "-permanent"
+        permanent_machine.fast_replaceable_group =
+            CONSTANTS.mod_name .. "-" .. machine_spec.original_name .. "-permanent"
         permanent_machine.next_upgrade = nil
         permanent_machine.icon = nil
         permanent_machine.flags = permanent_machine.flags or {}
@@ -652,10 +700,13 @@ for _, machine_spec in ipairs(PERMANENT_MACHINES) do
                 table.insert(permanent_machine.icons, icon_layer)
             end
         end
-        table.insert(permanent_machine.icons, {
-            icon = "__core__/graphics/icons/technology/effect-constant/effect-constant-productivity.png",
-            icon_size = 64
-        })
+        table.insert(
+            permanent_machine.icons,
+            {
+                icon = "__core__/graphics/icons/technology/effect-constant/effect-constant-productivity.png",
+                icon_size = 64
+            }
+        )
         permanent_machine.graphics_set = permanent_machine.graphics_set or {}
         permanent_machine.graphics_set.animation = {layers = {}}
         if machine_spec.base_layers then
@@ -665,20 +716,21 @@ for _, machine_spec in ipairs(PERMANENT_MACHINES) do
             end
         end
         if machine_spec.tint_layers then
-            for _, animation  in ipairs(machine_spec.tint_layers) do
+            for _, animation in ipairs(machine_spec.tint_layers) do
                 local animation_layer = table.deepcopy(animation)
                 animation_layer.tint = table.deepcopy(machine_spec.tint)
                 table.insert(permanent_machine.graphics_set.animation.layers, animation_layer)
             end
         end
         if machine_spec.after_tint_layers then
-            for _, animation  in ipairs(machine_spec.after_tint_layers) do
+            for _, animation in ipairs(machine_spec.after_tint_layers) do
                 local animation_layer = table.deepcopy(animation)
                 table.insert(permanent_machine.graphics_set.animation.layers, animation_layer)
             end
         end
         if machine_spec.make_4way == true then
-            permanent_machine.graphics_set.animation = make_4way_animation_from_spritesheet(permanent_machine.graphics_set.animation)
+            permanent_machine.graphics_set.animation =
+                make_4way_animation_from_spritesheet(permanent_machine.graphics_set.animation)
         end
         permanent_machine.graphics_set_flipped = nil
         if machine_spec.pipe_layers or machine_spec.pipe_tint_layers or machine_spec.pipe_after_tint_layers then
@@ -720,7 +772,23 @@ for _, machine_spec in ipairs(PERMANENT_MACHINES) do
         end
         permanent_machine.max_health = (permanent_machine.max_health or 10) * PERMANENT_MACHINE_HEALTH_MULT
         permanent_machine.effect_receiver = permanent_machine.effect_receiver or {}
-        permanent_machine.effect_receiver.base_effect = {productivity = PERMANENT_MACHINE_PRODUCTIVITY_BONUS_PERCENT / 100.}
+        permanent_machine.effect_receiver.base_effect = {
+            productivity = PERMANENT_MACHINE_PRODUCTIVITY_BONUS_PERCENT / 100.
+        }
+
+        if permanent_machine.energy_source then
+            permanent_machine.energy_source.effectivity = 1 + PERMANENT_MACHINE_PRODUCTIVITY_BONUS_PERCENT / 100.
+        end
+        if machine_spec.original_name == "boiler" then
+            permanent_machine.energy_consumption =
+                tostring(
+                (1 + PERMANENT_MACHINE_PRODUCTIVITY_BONUS_PERCENT / 100.) * 60 *
+                    util.parse_energy(permanent_machine.energy_consumption)
+            ) .. "W"
+        end
+        if machine_spec.original_name == "steam-engine" then
+            permanent_machine.effectivity = 1 + PERMANENT_MACHINE_PRODUCTIVITY_BONUS_PERCENT / 100.
+        end
 
         ---@type data.EntityWithHealthPrototype
         local unlocked_machine = table.deepcopy(permanent_machine)
@@ -737,12 +805,16 @@ for _, machine_spec in ipairs(PERMANENT_MACHINES) do
         unlocked_machine.placeable_by = {item = permanent_machine.name, count = 1}
 
         ---@type data.ItemPrototype
-        local machine_item = table.deepcopy(lib_prototypes.get_named_prototype("item", machine_spec.original_name) or {
-            type = "item",
-            order = CONSTANTS.mod_name .. "-" .. machine_spec.original_name,
-            stack_size = 50,
-            weight = 20 * kg
-        })
+        local machine_item =
+            table.deepcopy(
+            lib_prototypes.get_named_prototype("item", machine_spec.original_name) or
+                {
+                    type = "item",
+                    order = CONSTANTS.mod_name .. "-" .. machine_spec.original_name,
+                    stack_size = 50,
+                    weight = 20 * kg
+                }
+        )
         machine_item.name = permanent_machine.name
         machine_item.place_result = machine_item.name
         machine_item.icon = nil
@@ -755,13 +827,17 @@ for _, machine_spec in ipairs(PERMANENT_MACHINES) do
             name = permanent_machine.name,
             ingredients = {
                 {type = "item", name = machine_spec.original_name, amount = 1},
-                {type = "item", name = "refined-concrete", amount = lib_vectors.bounding_box_area(original_machine.selection_box)}
+                {
+                    type = "item",
+                    name = "refined-concrete",
+                    amount = lib_vectors.bounding_box_area(original_machine.selection_box)
+                }
             },
             results = {
                 {type = "item", name = machine_item.name, amount = 1, ignored_by_productivity = 1}
             },
             auto_recycle = false,
-            allow_productivity = false,
+            allow_productivity = false
         }
 
         for _, technology in pairs(data.raw.technology) do
