@@ -106,6 +106,7 @@ lab.icon = "__" .. CONSTANTS.mod_name .. "__/graphics/" .. "VoidLab/icon.png"
 
 local item = table.deepcopy(data.raw.item.lab)
 item.name = "void-lab"
+item.order = item.order .. "-v[oid]"
 item.place_result = "void-lab"
 item.icon = "__" .. CONSTANTS.mod_name .. "__/graphics/" .. "VoidLab/icon.png"
 
